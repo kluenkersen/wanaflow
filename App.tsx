@@ -64,8 +64,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, [isLoading, crystalOpacity])
 
-
-
   return (
     <View style={styles.container}>
       <View style={styles.viewText}>
@@ -76,19 +74,15 @@ export default function App() {
             <Text style={styles.quote}>{index + 1}. {item}</Text>
           ))
         }
-        
         <Text style={styles.quoteAutor}>{quoteAutor}</Text>
       </View>
       <View style={styles.viewIcon}>
-
         <Image style={{ position: 'relative', width: '100%', height: '100%', resizeMode: 'contain', opacity: crystalOpacity }} source={require('./assets/icon.png')} />
         <Image style={{ position: 'absolute', width: '100%', height: '100%', resizeMode: 'contain' }} source={require('./assets/icon_colorless.png')} />
         {isLoading ? (<ActivityIndicator style={{ position: 'absolute', width: '100%', height: '80%' }} size='small' color='#0000ff'></ActivityIndicator>) : (<View />)}
-
         <TouchableOpacity onPress={handleButtonPress} style={styles.button}>
           <Text style={styles.buttonText}>Push me</Text>
         </TouchableOpacity>
-
       </View>
       <View style={styles.viewBottom}>
       </View>
