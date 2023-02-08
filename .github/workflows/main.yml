@@ -53,8 +53,8 @@ jobs:
         run: eas update --auto --non-interactive
 
       - name: build package
-        run: eas build --platform all --non-interactive
+        run: eas build --platform android --non-interactive
         
         # submit build to app store      
       - name: deploy package to Andriod
-        run: eas submit --platform all --latest --non-interactive
+        run: eas submit --platform android --latest --non-interactive
