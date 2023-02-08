@@ -15,9 +15,9 @@ export default function App() {
   const [breathingSteps, setBreathingSteps] = useState([]);
   const [quoteAutor, setQuoteAutor] = useState();
 
-  function getRandomNumber(max) {
+  function getRandomNumber(maximum) {
     const min = 1;
-    const rand = parseInt(min + Math.random() * (max - min));
+    const rand = parseInt(min + Math.random() * (maximum - min));
     return rand;
   }
 
