@@ -16,7 +16,7 @@ export default function App() {
             <Stack.Navigator>
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Screen1" component={Screen1} options={{
-                    title: 'Cleansing Breath', headerShown: true, headerTitleAlign: 'center',
+                    title: 'Cleansing ', headerShown: true, headerTitleAlign: 'center',
                 }} />
                 <Stack.Screen name="Screen2" component={Screen2} options={{
                     title: 'Breath Practice', headerShown: true, headerTitleAlign: 'center',

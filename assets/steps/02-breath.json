@@ -1,28 +1,43 @@
 {
-    "1": {
-        "4-7-8 Breathing": [
-            "Start by breathing in through your nose for 4 counts",
-            "Hold your breath for 7 counts",
-            "Exhale through your mouth for 8 counts",
-            "Repeat for 4-5 cycles"
-        ]
-    },
-    "2": {
-        "Box Breathing": [
-            "Breathe in through your nose for 4 counts",
-            "Hold your breath for 4 counts",
-            "Exhale through your mouth for 4 counts",
-            "Hold your breath for 4 counts",
-            "Repeat for 4-5 cycles"
-        ]
-    },
-    "3": {
-        "Diaphragmatic Breathing": [
-            "Lie down or sit in a comfortable position",
-            "Place one hand on your stomach and one hand on your chest.",
-            "Breathe in through your nose, allowing your stomach to expand as you fill your lungs with air.",
-            "Exhale through your mouth, feeling your stomach contract as you empty your lungs.",
-            "Repeat for at least 5 cycles."
-        ]
-    }    
+    "0": [
+        {
+            "name": "4-7-8 Breathing",
+            "text": "Start by breathing in through your nose for 4 counts",
+            "breath": "nose_in",
+            "duraction": "4"
+        },
+        {
+            "text": "Hold your breath for 7 counts",
+            "breath": "hold",
+            "duraction": "7"
+        },
+        {
+            "text": "Exhale through your mouth for 8 counts",
+            "breath": "mouth_out",
+            "duraction": "8"
+        }
+    ],
+    "1": [
+        {
+            "name": "Box Breathing",
+            "text": "Breathe deeply in through your nose, counting to four as you inhale.",
+            "breath": "nose_in",
+            "duraction": "4"
+        },
+        {
+            "text": "Hold your breath for a count of four.",
+            "breath": "hold",
+            "duraction": "4"
+        },
+        {
+            "text": "Exhale for a count of four through your mouth, pursing your lips slightly as you release the breath.",
+            "breath": "mouth_out",
+            "duraction": "4"
+        },
+        {
+            "text": "Hold your breath for a count of four",
+            "breath": "hold",
+            "duraction": "4"
+        }
+    ]
 }
