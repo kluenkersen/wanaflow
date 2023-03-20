@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View, Text, Animated } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View, Text, Animated, Platform } from 'react-native';
+import { Storage } from 'expo-storage';
 
 import { globalStyles } from '../styles/styles';
 import quotes from '../assets/steps/01-cleansing.json';
@@ -23,14 +24,19 @@ export default function CleansingBreath({ navigation }) {
     const [statusIndex, setstatusIndex] = useState(0);
     const [showQuote, setShowQuote] = useState(false);
 
-
     function flow() {
-
-        // read file
-        // generate random number
-        // add number on top of it max is 100
-        // save file
+        saveFile();
+        navigation.navigate('Home')
     }
+
+    async function saveFile(){
+        if( Platform.OS !== 'web') {
+          await Storage.setItem({
+            key: "opacityStatus",
+            value: String(70)
+          });
+        }
+      }
 
     useEffect(() => {
         Animated.timing(scaleValue1, {
@@ -124,7 +130,7 @@ export default function CleansingBreath({ navigation }) {
             </View>
             <View style={globalStyles.containerBottom}>
                 {showQuote === true && (
-                    <TouchableOpacity style={globalStyles.button} onPress={(flow) => navigation.navigate('Home')}>
+                    <TouchableOpacity style={globalStyles.button} onPress={(flow)}>
                         <Text style={globalStyles.buttonText}>Flow</Text>
                     </TouchableOpacity>
                 )}
