@@ -37,7 +37,7 @@ export const globalStyles = StyleSheet.create({
     button: {
         width: 200,
         height: 50,
-        backgroundColor: '#00bcd4',
+        backgroundColor: 'rgba(181,114,249,255)',
         padding: 16,
         borderRadius: 8,
         marginTop: 24,

@@ -22,9 +22,9 @@
       "bundleIdentifier": "com.wanaflow"
     },
     "android": {
-      "versionCode": 6,
-      "release_status": "draft",
-      "com.google.android.gms.permission.AD_ID": 1,
+      "versionCode": 7,
+      // "release_status": "draft",
+      // "com.google.android.gms.permission.AD_ID": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

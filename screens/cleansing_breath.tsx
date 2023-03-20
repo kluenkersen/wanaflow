@@ -2,14 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View, Text, Animated } from 'react-native';
 
 import { globalStyles } from '../styles/styles';
-import quotes from './../assets/steps/01-cleansing.json';
+import quotes from '../assets/steps/01-cleansing.json';
 
-export default function Screen1({ navigation }) {
+export default function CleansingBreath({ navigation }) {
 
     const scaleValue1 = useRef(new Animated.Value(0.3)).current;
     const scaleValue2 = useRef(new Animated.Value(1)).current;
     const scaleValue3 = useRef(new Animated.Value(0.3)).current;
     const scaleValue4 = useRef(new Animated.Value(1)).current;
+    const scaleValue5 = useRef(new Animated.Value(0.3)).current;
+    const scaleValue6 = useRef(new Animated.Value(1)).current;
 
     const images = [
         require("../assets/breath/nose_in.jpeg"),
@@ -20,6 +22,15 @@ export default function Screen1({ navigation }) {
     const [countBreath, setCountBreath] = useState(0);
     const [statusIndex, setstatusIndex] = useState(0);
     const [showQuote, setShowQuote] = useState(false);
+
+
+    function flow() {
+
+        // read file
+        // generate random number
+        // add number on top of it max is 100
+        // save file
+    }
 
     useEffect(() => {
         Animated.timing(scaleValue1, {
@@ -45,7 +56,21 @@ export default function Screen1({ navigation }) {
                         duration: 3000,
                         useNativeDriver: true,
                     }).start(() => {
-                        setShowQuote(true);
+                        setstatusIndex(4);
+                        Animated.timing(scaleValue5, {
+                            toValue: 1,
+                            duration: 3000,
+                            useNativeDriver: true,
+                        }).start(() => {
+                            setstatusIndex(5);
+                            Animated.timing(scaleValue6, {
+                                toValue: 0.3,
+                                duration: 3000,
+                                useNativeDriver: true,
+                            }).start(() => {
+                                setShowQuote(true);
+                            });
+                        });
                     });
                 });
             });
@@ -60,7 +85,7 @@ export default function Screen1({ navigation }) {
                     {!showQuote && (
                         <View style={styles.imageContainer}>
                             <Text style={styles.text}>
-                                {statusIndex === 0 || statusIndex === 2 ? "Breath in" : "Breath out"}
+                                {statusIndex === 0 || statusIndex === 2 || statusIndex === 4 ? "Breath in" : "Breath out"}
                             </Text>
                             <View style={styles.imageWrapper}>
                                 {statusIndex === 0 && (
@@ -79,6 +104,14 @@ export default function Screen1({ navigation }) {
                                     <Animated.Image source={images[1]}
                                         style={[styles.image, { transform: [{ scale: scaleValue4 }] }]} />
                                 )}
+                                {statusIndex === 4 && (
+                                    <Animated.Image source={images[0]}
+                                        style={[styles.image, { transform: [{ scale: scaleValue5 }] }]} />
+                                )}
+                                {statusIndex === 5 && (
+                                    <Animated.Image source={images[1]}
+                                        style={[styles.image, { transform: [{ scale: scaleValue6 }] }]} />
+                                )}
                             </View>
                         </View>
                     )}
@@ -91,8 +124,8 @@ export default function Screen1({ navigation }) {
             </View>
             <View style={globalStyles.containerBottom}>
                 {showQuote === true && (
-                    <TouchableOpacity style={globalStyles.button} onPress={() => navigation.navigate('Screen2')}>
-                        <Text style={globalStyles.buttonText}>Next</Text>
+                    <TouchableOpacity style={globalStyles.button} onPress={(flow) => navigation.navigate('Home')}>
+                        <Text style={globalStyles.buttonText}>Flow</Text>
                     </TouchableOpacity>
                 )}
             </View>
