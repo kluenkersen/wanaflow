@@ -29,14 +29,32 @@ export default function CleansingBreath({ navigation }) {
         navigation.navigate('Home')
     }
 
-    async function saveFile(){
-        if( Platform.OS !== 'web') {
-          await Storage.setItem({
-            key: "opacityStatus",
-            value: String(70)
-          });
+    async function saveFile() {
+        if (Platform.OS !== 'web') {
+            let charge =  Math.floor(Math.random() * (100 - 70 + 1) + 70);
+            try {
+                let status = await Storage.getItem({ key: "opacityStatus" });
+                if (status != null) {
+                    charge = status + charge;
+                    if(charge > 100){
+                        charge = 100;
+                    }
+                    await Storage.setItem({
+                        key: "opacityStatus",
+                        value: String(charge)
+                    });
+                }else{
+                    await Storage.setItem({
+                        key: "opacityStatus",
+                        value: String(charge)
+                    });
+                }
+            }
+            catch (e) {
+                console.log(e);
+            }
         }
-      }
+    }
 
     useEffect(() => {
         Animated.timing(scaleValue1, {
