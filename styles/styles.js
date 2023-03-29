@@ -48,4 +48,11 @@ export const globalStyles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#fff',
     },
+    description: {
+        marginBottom: 15,
+        fontSize: 20,
+        textAlign: "center",
+        margin: 10,
+        color: 'rgba(169,175,248,1)',
+    }
 });

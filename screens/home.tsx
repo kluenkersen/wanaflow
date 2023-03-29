@@ -14,18 +14,28 @@ export default function HomeScreen({ navigation }) {
     const technique = ['CleansingBreath', 'BoxBreath']
     const [opacityStatus, setOpacityStatus] = useState(-1);
     const [fileAccess, setFileAccess] = useState(false);
-
+    const [date, setDate] = useState();
 
     useEffect(() => {
         loadFile();
-    })
+    }, []);
 
     async function loadFile() {
         if (Platform.OS !== 'web') {
             try {
                 let status = await Storage.getItem({ key: "opacityStatus" });
+                let date = await Storage.getItem({ key: "date" });
                 if (status != null) {
-                    setOpacityStatus(status);
+                    const timeDiffHours = Math.round((Date.now() - date) / (1000 * 60 * 60));
+                    const timePct = Math.min(timeDiffHours / 24 * 100, 100);
+                    setOpacityStatus(timePct);
+                    if ((status-timePct) < 0){
+                        status = 0;
+                    }else{
+                        status = status - timePct;
+                    }
+                    setOpacityStatus(Math.round(status));
+                    setDate(date);
                 }
             }
             catch (e) {

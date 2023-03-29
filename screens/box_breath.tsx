@@ -30,14 +30,31 @@ export default function BoxBreath({ navigation }) {
         navigation.navigate('Home')
     }
 
-    async function saveFile(){
-        if( Platform.OS !== 'web') {
-          await Storage.setItem({
-            key: "opacityStatus",
-            value: String(70)
-          });
+    async function saveFile() {
+        if (Platform.OS !== 'web') {
+            let charge = Math.floor(Math.random() * (100 - 70 + 1) + 70);
+            try {
+                let status = await Storage.getItem({ key: "opacityStatus" });
+                if (status != null) {
+                    charge = status + charge;
+                    if (charge > 100) {
+                        charge = 100;
+                    }
+                }
+                await Storage.setItem({
+                    key: "opacityStatus",
+                    value: String(charge)
+                });
+                await Storage.setItem({
+                    key: "date",
+                    value: String(Date.now())
+                });
+            }
+            catch (e) {
+                console.log(e);
+            }
         }
-      }
+    }
 
     useEffect(() => {
         Animated.timing(scaleValue1, {
@@ -129,138 +146,150 @@ export default function BoxBreath({ navigation }) {
         });
     }, []);
 
-return (
-    <View style={globalStyles.container}>
-        <View style={globalStyles.containerTop}>
+    return (
+        <View style={globalStyles.container}>
+            <View style={globalStyles.containerTop}>
 
-            <View style={styles.container}>
-                {!showQuote && (
-                    <View>
-                        {statusIndex === 0 && (
-                            <View>
-                                <Text style={styles.text}>Breath in</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[0]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue1 }] }]} />
+                <View style={styles.container}>
+                    {!showQuote && (
+                        <View>
+                            {statusIndex === 0 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Breath in</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[0]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue1 }] }]} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Breathe deeply in through your nose, counting to four as you inhale.</Text>
                                 </View>
-                            </View>
-                        )}
-                        {statusIndex === 1 && (
-                            <View>
-                                <Text style={styles.text}>Hold</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[2]}
-                                        style={styles.image_hold} />
+                            )}
+                            {statusIndex === 1 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Hold</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[2]}
+                                            style={styles.image_hold} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
                                 </View>
-                            </View>
-                        )}
-                        {statusIndex === 2 && (
-                            <View>
-                                <Text style={styles.text}>Breath out</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[1]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue2 }] }]} />
+                            )}
+                            {statusIndex === 2 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Breath out</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[1]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue2 }] }]} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Exhale for a count of four through your mouth, pursing your lips slightly as you release the breath.</Text>
                                 </View>
-                            </View>
-                        )}
-                        {statusIndex === 3 && (
-                            <View>
-                                <Text style={styles.text}>Hold</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[2]}
-                                        style={styles.image_hold} />
+                            )}
+                            {statusIndex === 3 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Hold</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[2]}
+                                            style={styles.image_hold} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
                                 </View>
-                            </View>
-                        )}{statusIndex === 4 && (
-                            <View>
-                                <Text style={styles.text}>Breath in</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[0]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue3 }] }]} />
+                            )}{statusIndex === 4 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Breath in</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[0]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue3 }] }]} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Breathe deeply in through your nose, counting to four as you inhale.</Text>
                                 </View>
-                            </View>
-                        )}
-                        {statusIndex === 5 && (
-                            <View>
-                                <Text style={styles.text}>Hold</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[2]}
-                                        style={styles.image_hold} />
+                            )}
+                            {statusIndex === 5 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Hold</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[2]}
+                                            style={styles.image_hold} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
                                 </View>
-                            </View>
-                        )}
-                        {statusIndex === 6 && (
-                            <View>
-                                <Text style={styles.text}>Breath out</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[1]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue4 }] }]} />
+                            )}
+                            {statusIndex === 6 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Breath out</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[1]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue4 }] }]} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Exhale for a count of four through your mouth, pursing your lips slightly as you release the breath.</Text>
                                 </View>
-                            </View>
-                        )}
-                        {statusIndex === 7 && (
-                            <View>
-                                <Text style={styles.text}>Hold</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[2]}
-                                        style={styles.image_hold} />
+                            )}
+                            {statusIndex === 7 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Hold</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[2]}
+                                            style={styles.image_hold} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
                                 </View>
-                            </View>
-                        )}{statusIndex === 8 && (
-                            <View>
-                                <Text style={styles.text}>Breath in</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[0]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue5 }] }]} />
+                            )}{statusIndex === 8 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Breath in</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[0]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue5 }] }]} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Breathe deeply in through your nose, counting to four as you inhale.</Text>
                                 </View>
-                            </View>
-                        )}
-                        {statusIndex === 9 && (
-                            <View>
-                                <Text style={styles.text}>Hold</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[2]}
-                                        style={styles.image_hold} />
+                            )}
+                            {statusIndex === 9 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Hold</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[2]}
+                                            style={styles.image_hold} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
                                 </View>
-                            </View>
-                        )}
-                        {statusIndex === 10 && (
-                            <View>
-                                <Text style={styles.text}>Breath out</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[1]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue6 }] }]} />
+                            )}
+                            {statusIndex === 10 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Breath out</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[1]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue6 }] }]} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Exhale for a count of four through your mouth, pursing your lips slightly as you release the breath.</Text>
                                 </View>
-                            </View>
-                        )}
-                        {statusIndex === 11 && (
-                            <View>
-                                <Text style={styles.text}>Hold</Text>
-                                <View style={styles.imageWrapper}>
-                                    <Animated.Image source={images[2]}
-                                        style={styles.image_hold} />
+                            )}
+                            {statusIndex === 11 && (
+                                <View style={styles.imageContainer}>
+                                    <Text style={styles.text}>Hold</Text>
+                                    <View style={styles.imageWrapper}>
+                                        <Animated.Image source={images[2]}
+                                            style={styles.image_hold} />
+                                    </View>
+                                    <Text style={globalStyles.description}>Hold your breath for a count of four</Text>
                                 </View>
-                            </View>
-                        )}
+                            )}
 
-                    </View>
-                )}
+                        </View>
+                    )}
+                    {showQuote === true && (
+                        <Text style={styles.quote}>
+                            {quotes[Math.floor(Math.random() * 78)]}
+                        </Text>
+                    )}
+                </View>
+            </View>
+            <View style={globalStyles.containerBottom}>
                 {showQuote === true && (
-                    <Text style={styles.quote}>
-                        {quotes[Math.floor(Math.random() * 78)]}
-                    </Text>
+                    <TouchableOpacity style={globalStyles.button} onPress={(flow)}>
+                        <Text style={globalStyles.buttonText}>Flow</Text>
+                    </TouchableOpacity>
                 )}
             </View>
         </View>
-        <View style={globalStyles.containerBottom}>
-            {showQuote === true && (
-                <TouchableOpacity style={globalStyles.button} onPress={(flow)}>
-                    <Text style={globalStyles.buttonText}>Flow</Text>
-                </TouchableOpacity>
-            )}
-        </View>
-    </View>
-);
+    );
 }
 
 const styles = StyleSheet.create({

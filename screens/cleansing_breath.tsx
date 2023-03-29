@@ -31,24 +31,24 @@ export default function CleansingBreath({ navigation }) {
 
     async function saveFile() {
         if (Platform.OS !== 'web') {
-            let charge =  Math.floor(Math.random() * (100 - 70 + 1) + 70);
+            let charge = Math.floor(Math.random() * (100 - 70 + 1) + 70);
             try {
                 let status = await Storage.getItem({ key: "opacityStatus" });
                 if (status != null) {
                     charge = status + charge;
-                    if(charge > 100){
+                    if (charge > 100) {
                         charge = 100;
                     }
-                    await Storage.setItem({
-                        key: "opacityStatus",
-                        value: String(charge)
-                    });
-                }else{
-                    await Storage.setItem({
-                        key: "opacityStatus",
-                        value: String(charge)
-                    });
+
                 }
+                await Storage.setItem({
+                    key: "opacityStatus",
+                    value: String(charge)
+                });
+                await Storage.setItem({
+                    key: "date",
+                    value: String(Date.now())
+                });
             }
             catch (e) {
                 console.log(e);
@@ -113,28 +113,46 @@ export default function CleansingBreath({ navigation }) {
                             </Text>
                             <View style={styles.imageWrapper}>
                                 {statusIndex === 0 && (
-                                    <Animated.Image source={images[0]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue1 }] }]} />
+                                    <View>
+                                        <Animated.Image source={images[0]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue1 }] }]} />
+                                        {/* <Text></Text> */}
+                                    </View>
                                 )}
                                 {statusIndex === 1 && (
-                                    <Animated.Image source={images[1]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue2 }] }]} />
+                                    <View>
+                                        <Animated.Image source={images[1]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue2 }] }]} />
+                                        {/* <Text></Text> */}
+                                    </View>
                                 )}
                                 {statusIndex === 2 && (
-                                    <Animated.Image source={images[0]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue3 }] }]} />
+                                    <View>
+                                        <Animated.Image source={images[0]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue3 }] }]} />
+                                        {/* <Text></Text> */}
+                                    </View>
                                 )}
                                 {statusIndex === 3 && (
-                                    <Animated.Image source={images[1]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue4 }] }]} />
+                                    <View>
+                                        <Animated.Image source={images[1]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue4 }] }]} />
+                                        {/* <Text></Text> */}
+                                    </View>
                                 )}
                                 {statusIndex === 4 && (
-                                    <Animated.Image source={images[0]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue5 }] }]} />
+                                    <View>
+                                        <Animated.Image source={images[0]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue5 }] }]} />
+                                        {/* <Text></Text> */}
+                                    </View>
                                 )}
                                 {statusIndex === 5 && (
-                                    <Animated.Image source={images[1]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue6 }] }]} />
+                                    <View>
+                                        <Animated.Image source={images[1]}
+                                            style={[styles.image, { transform: [{ scale: scaleValue6 }] }]} />
+                                        {/* <Text></Text> */}
+                                    </View>
                                 )}
                             </View>
                         </View>
