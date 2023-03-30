@@ -5,7 +5,9 @@ import { Storage } from 'expo-storage';
 import { globalStyles } from '../styles/styles';
 import quotes from '../assets/steps/01-cleansing.json';
 
-export default function BoxBreath({ navigation }) {
+export default function BoxBreath({ navigation, route }) {
+
+    const opacityStatus = route.params.opacityStatus;
 
     const scaleValue1 = useRef(new Animated.Value(0.3)).current;
     const scaleValue2 = useRef(new Animated.Value(1)).current;
@@ -26,21 +28,21 @@ export default function BoxBreath({ navigation }) {
     const [showQuote, setShowQuote] = useState(false);
 
     function flow() {
-        saveFile();
-        navigation.navigate('Home')
+        // calculate charge
+        let charge = Math.floor(Math.random() * (100 - 70 + 1) + 70);
+        charge = opacityStatus + charge;
+        if (charge > 100) {
+            charge = 100;
+        }
+        // save it to file
+        saveFile(charge);
+        // switch screen
+        navigation.navigate('Home', { charge })
     }
 
-    async function saveFile() {
+    async function saveFile(charge) {
         if (Platform.OS !== 'web') {
-            let charge = Math.floor(Math.random() * (100 - 70 + 1) + 70);
             try {
-                let status = await Storage.getItem({ key: "opacityStatus" });
-                if (status != null) {
-                    charge = status + charge;
-                    if (charge > 100) {
-                        charge = 100;
-                    }
-                }
                 await Storage.setItem({
                     key: "opacityStatus",
                     value: String(charge)
