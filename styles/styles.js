@@ -44,7 +44,7 @@ export const globalStyles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        fontSize: 18,
+        fontSize: 15,
         fontWeight: 'bold',
         color: '#fff',
     },

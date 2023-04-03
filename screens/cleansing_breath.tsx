@@ -7,7 +7,8 @@ import quotes from '../assets/steps/01-cleansing.json';
 
 export default function CleansingBreath({ navigation, route }) {
 
-    const opacityStatus = route.params.opacityStatus;
+    // const opacityStatus = 0; 
+    // route.params.opacityStatus;
 
     const scaleValue1 = useRef(new Animated.Value(0.3)).current;
     const scaleValue2 = useRef(new Animated.Value(1)).current;
@@ -26,35 +27,16 @@ export default function CleansingBreath({ navigation, route }) {
     const [statusIndex, setstatusIndex] = useState(0);
     const [showQuote, setShowQuote] = useState(false);
 
-    function flow() {
-        // calculate charge
-        let charge = Math.floor(Math.random() * (100 - 70 + 1) + 70);
-        charge = opacityStatus + charge;
-        if (charge > 100) {
-            charge = 100;
-        }
-        // save it to file
-        saveFile(charge);
-        // switch screen
-        navigation.navigate('Home', { charge })
-    }
 
-    async function saveFile(charge) {
-        if (Platform.OS !== 'web') {
-            try {
-                await Storage.setItem({
-                    key: "opacityStatus",
-                    value: String(charge)
-                });
-                await Storage.setItem({
-                    key: "date",
-                    value: String(Date.now())
-                });
-            }
-            catch (e) {
-                console.log(e);
-            }
-        }
+    function flow(charge) {
+        // calculate charge
+        // let charge = Math.floor(Math.random() * (100 - 70 + 1) + 70);
+        // charge = opacityStatus + charge;
+        // if (charge > 100) {
+        //     charge = 100;
+        // }
+        // switch screen
+        navigation.navigate('End', { charge })
     }
 
     useEffect(() => {
@@ -93,7 +75,13 @@ export default function CleansingBreath({ navigation, route }) {
                                 duration: 3000,
                                 useNativeDriver: true,
                             }).start(() => {
-                                setShowQuote(true);
+                                // setShowQuote(true);
+                                let charge = route.params.opacityStatus + Math.floor(Math.random() * (100 - 70 + 1) + 70);
+                                if(charge > 100){
+                                    charge = 100;
+                                }
+                              
+                                flow(charge);
                             });
                         });
                     });
