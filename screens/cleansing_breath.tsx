@@ -1,164 +1,88 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View, Text, Animated, Platform } from 'react-native';
 import { Storage } from 'expo-storage';
+
+import { useFocusEffect } from '@react-navigation/native';
 
 import { globalStyles } from '../styles/styles';
 import quotes from '../assets/steps/01-cleansing.json';
 
 export default function CleansingBreath({ navigation, route }) {
 
-    // const opacityStatus = 0; 
-    // route.params.opacityStatus;
-
-    const scaleValue1 = useRef(new Animated.Value(0.3)).current;
-    const scaleValue2 = useRef(new Animated.Value(1)).current;
-    const scaleValue3 = useRef(new Animated.Value(0.3)).current;
-    const scaleValue4 = useRef(new Animated.Value(1)).current;
-    const scaleValue5 = useRef(new Animated.Value(0.3)).current;
-    const scaleValue6 = useRef(new Animated.Value(1)).current;
+    let scaleValue1 = useRef(new Animated.Value(0.3)).current;
+    let scaleValue2 = useRef(new Animated.Value(0.9)).current;
 
     const images = [
         require("../assets/breath/nose_in.jpeg"),
         require("../assets/breath/mouth_out.jpeg"),
     ];
 
-    const [quote, setQuote] = useState('');
-    const [countBreath, setCountBreath] = useState(0);
     const [statusIndex, setstatusIndex] = useState(0);
-    const [showQuote, setShowQuote] = useState(false);
+    const [maxLoop, setMaxLoop] = useState(5);
 
-
-    function flow(charge) {
-        // calculate charge
-        // let charge = Math.floor(Math.random() * (100 - 70 + 1) + 70);
-        // charge = opacityStatus + charge;
-        // if (charge > 100) {
-        //     charge = 100;
-        // }
-        // switch screen
-        navigation.navigate('End', { charge })
+    function goAgain() {
+        setstatusIndex(0);
+        const looped = (route.params.looped + 1)
+        scaleValue1.setValue(0.3);
+        scaleValue2.setValue(0.9);
+        navigation.navigate("CleansingBreath", { looped })
     }
 
-    useEffect(() => {
-        Animated.timing(scaleValue1, {
-            toValue: 1,
-            duration: 3000,
-            useNativeDriver: true,
-        }).start(() => {
-            setstatusIndex(1);
-            Animated.timing(scaleValue2, {
-                toValue: 0.3,
+    useFocusEffect(
+        useCallback(() => {
+            Animated.timing(scaleValue1, {
+                toValue: 0.9,
                 duration: 3000,
                 useNativeDriver: true,
             }).start(() => {
-                setstatusIndex(2);
-                Animated.timing(scaleValue3, {
-                    toValue: 1,
+                setstatusIndex(1);
+                Animated.timing(scaleValue2, {
+                    toValue: 0.3,
                     duration: 3000,
                     useNativeDriver: true,
                 }).start(() => {
-                    setstatusIndex(3);
-                    Animated.timing(scaleValue4, {
-                        toValue: 0.3,
-                        duration: 3000,
-                        useNativeDriver: true,
-                    }).start(() => {
-                        setstatusIndex(4);
-                        Animated.timing(scaleValue5, {
-                            toValue: 1,
-                            duration: 3000,
-                            useNativeDriver: true,
-                        }).start(() => {
-                            setstatusIndex(5);
-                            Animated.timing(scaleValue6, {
-                                toValue: 0.3,
-                                duration: 3000,
-                                useNativeDriver: true,
-                            }).start(() => {
-                                // setShowQuote(true);
-                                let charge = route.params.opacityStatus + Math.floor(Math.random() * (100 - 70 + 1) + 70);
-                                if(charge > 100){
-                                    charge = 100;
-                                }
-                              
-                                flow(charge);
-                            });
-                        });
-                    });
+                    if (route.params.looped != maxLoop) {
+                        goAgain();
+                    } else {
+                        route.params.looped = 1;
+                        setstatusIndex(0);
+                        scaleValue1.setValue(0.3);
+                        scaleValue2.setValue(0.9);
+                        navigation.navigate('End');
+                    }
                 });
             });
-        });
-    }, []);
+        }, [route.params.looped])
+    );
 
     return (
         <View style={globalStyles.container}>
             <View style={globalStyles.containerTop}>
-
+                <Text>{route.params.looped}/{maxLoop}</Text>
                 <View style={styles.container}>
-                    {!showQuote && (
-                        <View style={styles.imageContainer}>
-                            <Text style={styles.text}>
-                                {statusIndex === 0 || statusIndex === 2 || statusIndex === 4 ? "Breath in" : "Breath out"}
-                            </Text>
-                            <View style={styles.imageWrapper}>
-                                {statusIndex === 0 && (
-                                    <View>
-                                        <Animated.Image source={images[0]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue1 }] }]} />
-                                        {/* <Text></Text> */}
-                                    </View>
-                                )}
-                                {statusIndex === 1 && (
-                                    <View>
-                                        <Animated.Image source={images[1]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue2 }] }]} />
-                                        {/* <Text></Text> */}
-                                    </View>
-                                )}
-                                {statusIndex === 2 && (
-                                    <View>
-                                        <Animated.Image source={images[0]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue3 }] }]} />
-                                        {/* <Text></Text> */}
-                                    </View>
-                                )}
-                                {statusIndex === 3 && (
-                                    <View>
-                                        <Animated.Image source={images[1]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue4 }] }]} />
-                                        {/* <Text></Text> */}
-                                    </View>
-                                )}
-                                {statusIndex === 4 && (
-                                    <View>
-                                        <Animated.Image source={images[0]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue5 }] }]} />
-                                        {/* <Text></Text> */}
-                                    </View>
-                                )}
-                                {statusIndex === 5 && (
-                                    <View>
-                                        <Animated.Image source={images[1]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue6 }] }]} />
-                                        {/* <Text></Text> */}
-                                    </View>
-                                )}
-                            </View>
-                        </View>
-                    )}
-                    {showQuote === true && (
-                        <Text style={styles.quote}>
-                            {quotes[Math.floor(Math.random() * 78)]}
+                    <View style={styles.imageContainer}>
+                        <Text style={styles.text}>
+                            {statusIndex === 0 || statusIndex === 2 || statusIndex === 4 ? "Breathe in" : "Breathe out"}
                         </Text>
-                    )}
+                        <View style={styles.imageWrapper}>
+                            {statusIndex === 0 && (
+                                <View>
+                                    <Animated.Image source={images[0]}
+                                        style={[styles.image, { transform: [{ scale: scaleValue1 }] }]} />
+                                    {/* <Text></Text> */}
+                                </View>
+                            )}
+                            {statusIndex === 1 && (
+                                <View>
+                                    <Animated.Image source={images[1]}
+                                        style={[styles.image, { transform: [{ scale: scaleValue2 }] }]} />
+                                    {/* <Text></Text> */}
+                                </View>
+                            )}
+                        </View>
+                    </View>
+
                 </View>
-            </View>
-            <View style={globalStyles.containerBottom}>
-                {showQuote === true && (
-                    <TouchableOpacity style={globalStyles.button} onPress={(flow)}>
-                        <Text style={globalStyles.buttonText}>Flow</Text>
-                    </TouchableOpacity>
-                )}
             </View>
         </View>
     );

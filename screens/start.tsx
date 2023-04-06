@@ -11,8 +11,10 @@ export default function StartScreen({ navigation }) {
     const [opacityStatus, setOpacityStatus] = useState(-1);
     const [date, setDate] = useState();
 
-    function navigate(){
-        navigation.navigate(technique[Math.floor(Math.random() * 2)], {opacityStatus});
+    function navigate() {
+        let looped = 1;
+        navigation.navigate(technique[Math.floor(Math.random() * 2)], { looped });
+        // navigation.navigate("BoxBreath", { looped });
     }
 
     async function loadFile() {
@@ -41,7 +43,7 @@ export default function StartScreen({ navigation }) {
 
     useEffect(() => {
         loadFile();
-    },[])
+    }, [])
 
     return (
         <View style={globalStyles.container}>
@@ -52,7 +54,6 @@ export default function StartScreen({ navigation }) {
             </View>
             <View style={globalStyles.containerBottom}>
                 <TouchableOpacity style={globalStyles.button} onPress={ navigate }>
-                {/* <TouchableOpacity style={globalStyles.button} onPress={}> */}
                     <Text style={globalStyles.buttonText}>Flow</Text>
                 </TouchableOpacity>
             </View>

@@ -1,22 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View, Text, Animated, Platform } from 'react-native';
 import { Storage } from 'expo-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { globalStyles } from '../styles/styles';
 import quotes from '../assets/steps/01-cleansing.json';
 
 export default function BoxBreath({ navigation, route }) {
 
-    // const opacityStatus = 0;
-    // route.params.opacityStatus;
-
     const scaleValue1 = useRef(new Animated.Value(0.3)).current;
-    const scaleValue2 = useRef(new Animated.Value(1)).current;
-    const scaleValue3 = useRef(new Animated.Value(0.3)).current;
-    const scaleValue4 = useRef(new Animated.Value(1)).current;
-    const scaleValue5 = useRef(new Animated.Value(0.3)).current;
-    const scaleValue6 = useRef(new Animated.Value(1)).current;
-    const scaleValueHold = useRef(new Animated.Value(1)).current;
+    const scaleValue2 = useRef(new Animated.Value(0.9)).current;
+    const scaleValueHold = useRef(new Animated.Value(0.9)).current;
 
     const images = [
         require("../assets/breath/nose_in.jpeg"),
@@ -24,261 +18,208 @@ export default function BoxBreath({ navigation, route }) {
         require("../assets/breath/hold.jpeg"),
     ];
 
-    const [quote, setQuote] = useState('');
-    const [countBreath, setCountBreath] = useState(0);
     const [statusIndex, setstatusIndex] = useState(0);
-    const [showQuote, setShowQuote] = useState(false);
+    const [maxLoop, setMaxLoop] = useState(5);
 
-    function flow(charge) {
-        // calculate charge
-        // let charge = Math.floor(Math.random() * (100 - 70 + 1) + 70);
-        // charge = opacityStatus + charge;
-        // if (charge > 100) {
-        //     charge = 100;
-        // }
-        // switch screen
-        navigation.navigate('End', { charge })
+    function goAgain() {
+        setstatusIndex(0);
+        const looped = (route.params.looped + 1)
+        scaleValue1.setValue(0.3);
+        scaleValue2.setValue(0.9);
+        navigation.navigate("BoxBreath", { looped })
     }
 
-    useEffect(() => {
-        Animated.timing(scaleValue1, {
-            toValue: 1,
-            duration: 4000,
-            useNativeDriver: true,
-        }).start(() => {
-            setstatusIndex(1);
-            Animated.timing(scaleValueHold, {
-                toValue: 1,
+    useFocusEffect(
+        useCallback(() => {
+            Animated.timing(scaleValue1, {
+                toValue: 0.9,
                 duration: 4000,
                 useNativeDriver: true,
-            }
-            ).start(() => {
-                setstatusIndex(2);
-                Animated.timing(scaleValue2, {
-                    toValue: 0.3,
+            }).start(() => {
+                setstatusIndex(1);
+                Animated.timing(scaleValueHold, {
+                    toValue: 0.9,
                     duration: 4000,
                     useNativeDriver: true,
-                }).start(() => {
-                    setstatusIndex(3);
-                    Animated.timing(scaleValueHold, {
-                        toValue: 1,
+                }
+                ).start(() => {
+                    setstatusIndex(2);
+                    Animated.timing(scaleValue2, {
+                        toValue: 0.3,
                         duration: 4000,
                         useNativeDriver: true,
                     }).start(() => {
-                        setstatusIndex(4);
-                        Animated.timing(scaleValue3, {
-                            toValue: 1,
+                        setstatusIndex(3);
+                        Animated.timing(scaleValueHold, {
+                            toValue: 0.9,
                             duration: 4000,
                             useNativeDriver: true,
                         }).start(() => {
-                            setstatusIndex(5);
-                            Animated.timing(scaleValueHold, {
-                                toValue: 1,
-                                duration: 4000,
-                                useNativeDriver: true,
+                            if (route.params.looped != maxLoop) {
+                                goAgain();
+                            } else {
+                                route.params.looped = 1;
+                                setstatusIndex(0);
+                                scaleValue1.setValue(0.3);
+                                scaleValue2.setValue(0.9);
+                                navigation.navigate('End');
                             }
-                            ).start(() => {
-                                setstatusIndex(6);
-                                Animated.timing(scaleValue4, {
-                                    toValue: 0.3,
-                                    duration: 4000,
-                                    useNativeDriver: true,
-                                }).start(() => {
-                                    setstatusIndex(7);
-                                    Animated.timing(scaleValueHold, {
-                                        toValue: 1,
-                                        duration: 4000,
-                                        useNativeDriver: true,
-                                    }).start(() => {
-                                        setstatusIndex(8);
-                                        Animated.timing(scaleValue5, {
-                                            toValue: 1,
-                                            duration: 4000,
-                                            useNativeDriver: true,
-                                        }).start(() => {
-                                            setstatusIndex(9);
-                                            Animated.timing(scaleValueHold, {
-                                                toValue: 1,
-                                                duration: 4000,
-                                                useNativeDriver: true,
-                                            }
-                                            ).start(() => {
-                                                setstatusIndex(10);
-                                                Animated.timing(scaleValue6, {
-                                                    toValue: 0.3,
-                                                    duration: 4000,
-                                                    useNativeDriver: true,
-                                                }).start(() => {
-                                                    setstatusIndex(11);
-                                                    Animated.timing(scaleValueHold, {
-                                                        toValue: 1,
-                                                        duration: 4000,
-                                                        useNativeDriver: true,
-                                                    }).start(() => {
-                                                        let charge = route.params.opacityStatus + Math.floor(Math.random() * (100 - 70 + 1) + 70);
-                                                        if (charge > 100) {
-                                                            charge = 100;
-                                                        }
-                                                        flow(charge);
-                                                    });
-                                                });
-                                            });
-                                        });
-                                    });
-                                });
-                            });
                         });
                     });
                 });
             });
-        });
-    }, []);
+        }, [route.params.looped])
+    );
+
+    // useEffect(() => {
+    //     Animated.timing(scaleValue1, {
+    //         toValue: 1,
+    //         duration: 4000,
+    //         useNativeDriver: true,
+    //     }).start(() => {
+    //         setstatusIndex(1);
+    //         Animated.timing(scaleValueHold, {
+    //             toValue: 1,
+    //             duration: 4000,
+    //             useNativeDriver: true,
+    //         }
+    //         ).start(() => {
+    //             setstatusIndex(2);
+    //             Animated.timing(scaleValue2, {
+    //                 toValue: 0.3,
+    //                 duration: 4000,
+    //                 useNativeDriver: true,
+    //             }).start(() => {
+    //                 setstatusIndex(3);
+    //                 Animated.timing(scaleValueHold, {
+    //                     toValue: 1,
+    //                     duration: 4000,
+    //                     useNativeDriver: true,
+    //                 }).start(() => {
+    //                     setstatusIndex(4);
+    //                     Animated.timing(scaleValue3, {
+    //                         toValue: 1,
+    //                         duration: 4000,
+    //                         useNativeDriver: true,
+    //                     }).start(() => {
+    //                         setstatusIndex(5);
+    //                         Animated.timing(scaleValueHold, {
+    //                             toValue: 1,
+    //                             duration: 4000,
+    //                             useNativeDriver: true,
+    //                         }
+    //                         ).start(() => {
+    //                             setstatusIndex(6);
+    //                             Animated.timing(scaleValue4, {
+    //                                 toValue: 0.3,
+    //                                 duration: 4000,
+    //                                 useNativeDriver: true,
+    //                             }).start(() => {
+    //                                 setstatusIndex(7);
+    //                                 Animated.timing(scaleValueHold, {
+    //                                     toValue: 1,
+    //                                     duration: 4000,
+    //                                     useNativeDriver: true,
+    //                                 }).start(() => {
+    //                                     setstatusIndex(8);
+    //                                     Animated.timing(scaleValue5, {
+    //                                         toValue: 1,
+    //                                         duration: 4000,
+    //                                         useNativeDriver: true,
+    //                                     }).start(() => {
+    //                                         setstatusIndex(9);
+    //                                         Animated.timing(scaleValueHold, {
+    //                                             toValue: 1,
+    //                                             duration: 4000,
+    //                                             useNativeDriver: true,
+    //                                         }
+    //                                         ).start(() => {
+    //                                             setstatusIndex(10);
+    //                                             Animated.timing(scaleValue6, {
+    //                                                 toValue: 0.3,
+    //                                                 duration: 4000,
+    //                                                 useNativeDriver: true,
+    //                                             }).start(() => {
+    //                                                 setstatusIndex(11);
+    //                                                 Animated.timing(scaleValueHold, {
+    //                                                     toValue: 1,
+    //                                                     duration: 4000,
+    //                                                     useNativeDriver: true,
+    //                                                 }).start(() => {
+    //                                                     let charge = route.params.opacityStatus + Math.floor(Math.random() * (100 - 70 + 1) + 70);
+    //                                                     if (charge > 100) {
+    //                                                         charge = 100;
+    //                                                     }
+    //                                                     flow(charge);
+    //                                                 });
+    //                                             });
+    //                                         });
+    //                                     });
+    //                                 });
+    //                             });
+    //                         });
+    //                     });
+    //                 });
+    //             });
+    //         });
+    //     });
+    // }, []);
 
     return (
         <View style={globalStyles.container}>
             <View style={globalStyles.containerTop}>
-
+            <Text>{route.params.looped}/{maxLoop}</Text>
                 <View style={styles.container}>
-                    {!showQuote && (
-                        <View>
-                            {statusIndex === 0 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Breath in</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[0]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue1 }] }]} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Breathe deeply in through your nose, counting to four as you inhale.</Text>
+                    <View>
+                        {statusIndex === 0 && (
+                            <View style={styles.imageContainer}>
+                                <Text style={styles.text}>Breath in</Text>
+                                <View style={styles.imageWrapper}>
+                                    <Animated.Image source={images[0]}
+                                        style={[styles.image, { transform: [{ scale: scaleValue1 }] }]} />
                                 </View>
-                            )}
-                            {statusIndex === 1 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Hold</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[2]}
-                                            style={styles.image_hold} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
+                                <Text style={globalStyles.description}>Breathe deeply in through your nose, counting to four as you inhale.</Text>
+                            </View>
+                        )}
+                        {statusIndex === 1 && (
+                            <View style={styles.imageContainer}>
+                                <Text style={styles.text}>Hold</Text>
+                                <View style={styles.imageWrapper}>
+                                    <Animated.Image source={images[2]}
+                                        style={styles.image_hold} />
                                 </View>
-                            )}
-                            {statusIndex === 2 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Breath out</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[1]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue2 }] }]} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Exhale for a count of four through your mouth, pursing your lips slightly as you release the breath.</Text>
+                                <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
+                            </View>
+                        )}
+                        {statusIndex === 2 && (
+                            <View style={styles.imageContainer}>
+                                <Text style={styles.text}>Breath out</Text>
+                                <View style={styles.imageWrapper}>
+                                    <Animated.Image source={images[1]}
+                                        style={[styles.image, { transform: [{ scale: scaleValue2 }] }]} />
                                 </View>
-                            )}
-                            {statusIndex === 3 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Hold</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[2]}
-                                            style={styles.image_hold} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
+                                <Text style={globalStyles.description}>Exhale for a count of four through your mouth, pursing your lips slightly as you release the breath.</Text>
+                            </View>
+                        )}
+                        {statusIndex === 3 && (
+                            <View style={styles.imageContainer}>
+                                <Text style={styles.text}>Hold</Text>
+                                <View style={styles.imageWrapper}>
+                                    <Animated.Image source={images[2]}
+                                        style={styles.image_hold} />
                                 </View>
-                            )}{statusIndex === 4 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Breath in</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[0]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue3 }] }]} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Breathe deeply in through your nose, counting to four as you inhale.</Text>
-                                </View>
-                            )}
-                            {statusIndex === 5 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Hold</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[2]}
-                                            style={styles.image_hold} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
-                                </View>
-                            )}
-                            {statusIndex === 6 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Breath out</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[1]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue4 }] }]} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Exhale for a count of four through your mouth, pursing your lips slightly as you release the breath.</Text>
-                                </View>
-                            )}
-                            {statusIndex === 7 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Hold</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[2]}
-                                            style={styles.image_hold} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
-                                </View>
-                            )}{statusIndex === 8 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Breath in</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[0]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue5 }] }]} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Breathe deeply in through your nose, counting to four as you inhale.</Text>
-                                </View>
-                            )}
-                            {statusIndex === 9 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Hold</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[2]}
-                                            style={styles.image_hold} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
-                                </View>
-                            )}
-                            {statusIndex === 10 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Breath out</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[1]}
-                                            style={[styles.image, { transform: [{ scale: scaleValue6 }] }]} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Exhale for a count of four through your mouth, pursing your lips slightly as you release the breath.</Text>
-                                </View>
-                            )}
-                            {statusIndex === 11 && (
-                                <View style={styles.imageContainer}>
-                                    <Text style={styles.text}>Hold</Text>
-                                    <View style={styles.imageWrapper}>
-                                        <Animated.Image source={images[2]}
-                                            style={styles.image_hold} />
-                                    </View>
-                                    <Text style={globalStyles.description}>Hold your breath for a count of four</Text>
-                                </View>
-                            )}
-
-                        </View>
-                    )}
-                    {showQuote === true && (
-                        <Text style={styles.quote}>
-                            {quotes[Math.floor(Math.random() * 78)]}
-                        </Text>
-                    )}
+                                <Text style={globalStyles.description}>Hold your breath for a count of four.</Text>
+                            </View>
+                        )}
+                    </View>
+                    <View style={globalStyles.containerBottom}>
+                    </View>
                 </View>
-            </View>
-            <View style={globalStyles.containerBottom}>
-                {showQuote === true && (
-                    <TouchableOpacity style={globalStyles.button} onPress={(flow)}>
-                        <Text style={globalStyles.buttonText}>Flow</Text>
-                    </TouchableOpacity>
-                )}
             </View>
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     title: {
