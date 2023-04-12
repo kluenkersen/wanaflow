@@ -46,14 +46,17 @@ export default function StartScreen({ navigation }) {
     }, [])
 
     return (
-        <View style={globalStyles.container}>
+
+        <View style={styles.container}>
             <View style={globalStyles.containerTop}>
+            </View>
+            <View style={globalStyles.containerMiddle}>
                 <Text style={styles.quote}>
                     {quotes[Math.floor(Math.random() * 78)]}
                 </Text>
             </View>
             <View style={globalStyles.containerBottom}>
-                <TouchableOpacity style={globalStyles.button} onPress={ navigate }>
+                <TouchableOpacity style={globalStyles.button} onPress={navigate}>
                     <Text style={globalStyles.buttonText}>Flow</Text>
                 </TouchableOpacity>
             </View>

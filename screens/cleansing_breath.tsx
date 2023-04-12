@@ -56,78 +56,49 @@ export default function CleansingBreath({ navigation, route }) {
     );
 
     return (
-        <View style={globalStyles.container}>
+
+        <View style={styles.container}>
             <View style={globalStyles.containerTop}>
                 <Text>{route.params.looped}/{maxLoop}</Text>
-                <View style={styles.container}>
-                    <View style={styles.imageContainer}>
-                        <Text style={styles.text}>
-                            {statusIndex === 0 || statusIndex === 2 || statusIndex === 4 ? "Breathe in" : "Breathe out"}
-                        </Text>
-                        <View style={styles.imageWrapper}>
-                            {statusIndex === 0 && (
-                                <View>
-                                    <Animated.Image source={images[0]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue1 }] }]} />
-                                    {/* <Text></Text> */}
-                                </View>
-                            )}
-                            {statusIndex === 1 && (
-                                <View>
-                                    <Animated.Image source={images[1]}
-                                        style={[styles.image, { transform: [{ scale: scaleValue2 }] }]} />
-                                    {/* <Text></Text> */}
-                                </View>
-                            )}
+            </View>
+            <View style={globalStyles.containerMiddle}>
+                <View style={globalStyles.imageContainer}>
+                    {statusIndex === 0 && (
+                        <View>
+                            <Text style={globalStyles.text}>Breathe in</Text>
+                            <View style={globalStyles.imageWrapper}>
+                                <Animated.Image source={images[0]} style={[globalStyles.image, { transform: [{ scale: scaleValue1 }] }]} />
+                            </View>
                         </View>
-                    </View>
-
+                    )}
+                    {statusIndex === 1 && (
+                        <View>
+                            <Text style={globalStyles.text}>Breathe out</Text>
+                            <View style={globalStyles.imageWrapper}>
+                                <Animated.Image source={images[1]} style={[globalStyles.image, { transform: [{ scale: scaleValue2 }] }]} />
+                            </View>
+                        </View>
+                    )}
                 </View>
             </View>
-        </View>
+            <View style={globalStyles.containerBottom}>
+                {statusIndex === 0 && (
+                    <Text style={globalStyles.description}>Breathe deeply in through your nose.</Text>
+                )}
+                {statusIndex === 1 && (
+                    <Text style={globalStyles.description}>Exhale through your mouth.</Text>
+                )}
+            </View>
+        </View >
+
     );
 }
 
 const styles = StyleSheet.create({
-    title: {
-        textAlign: 'center',
-        alignContent: 'center',
-        marginRight: 15,
-        marginLeft: 15,
-    },
     container: {
         flex: 1,
         backgroundColor: "#fff",
         alignItems: "center",
         justifyContent: "center",
     },
-    imageContainer: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    imageWrapper: {
-        borderRadius: 400 / 2,
-        borderColor: "#c2c0c4",
-        backgroundColor: 'rgba(169,175,248,0.1)',
-        overflow: "hidden",
-    },
-    image: {
-        width: 200,
-        height: 200,
-        borderRadius: 400 / 2,
-    },
-    text: {
-        marginBottom: 15,
-        fontSize: 20,
-        textAlign: "center",
-        margin: 10,
-        color: 'rgba(169,175,248,1)',
-    },
-    quote: {
-        fontSize: 20,
-        textAlign: "center",
-        margin: 10,
-        color: 'rgba(169,175,248,1)',
-    }
-})
+});
