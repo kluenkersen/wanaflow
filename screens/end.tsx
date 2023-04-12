@@ -4,12 +4,11 @@ import { Storage, AsyncStorage } from 'expo-storage';
 import { useFocusEffect } from '@react-navigation/native';
 
 import { globalStyles } from '../styles/styles.js';
-
+import quotes from '../assets/steps/04-endquotes.json';
 
 export default function EndScreen({ navigation, route }) {
 
     const charge = 0;
-
 
     const technique = ['CleansingBreath', 'BoxBreath']
     const [opacityStatus, setOpacityStatus] = useState(-1);
@@ -17,10 +16,10 @@ export default function EndScreen({ navigation, route }) {
     const [date, setDate] = useState();
     const [breathScreen, setBreathScreen] = useState();
 
-    useEffect(() =>{
+    useEffect(() => {
         // console.log(route.params)
         saveFile();
-    },[])
+    }, [])
 
     async function saveFile() {
         if (Platform.OS !== 'web') {
@@ -40,34 +39,18 @@ export default function EndScreen({ navigation, route }) {
         }
     }
 
-    // useFocusEffect(
-    //     useCallback(() => {
-    //         // set breath page to use
-    //         setBreathScreen(technique[Math.floor(Math.random() * 2)]);
-    //         // Your effect function goes here.
-    //         if (charge == 0) {
-    //             console.log('load');
-    //             loadFile();
-    //         } else {
-    //             console.log('set directly :P');
-    //             setOpacityStatus(charge);
-    //         }
-    //         // Optional clean-up function, if needed.
-    //         return () => {
-    //             console.log('HomeScreen out of focus');
-    //         };
-    //     }, [charge])
-    // );
-
     return (
-        <View style={globalStyles.container}>
-            <View>
-                <Text>{charge}</Text>
-            </View>
 
+        <View style={styles.container}>
             <View style={globalStyles.containerTop}>
+            <Text style={globalStyles.description}>{charge}% charged, 2/3  left</Text>
+            </View>
+            <View style={globalStyles.containerMiddle}>
                 <Image style={{ width: 200, height: 200, resizeMode: 'contain', opacity: charge / 100 }} source={require('./../assets/icon.png')} />
                 <Image style={{ width: 200, height: 200, resizeMode: 'contain', position: 'absolute', }} source={require('./../assets/icon_colorless.png')} />
+            </View>
+            <View style={globalStyles.containerBottom}>
+            <Text style={globalStyles.description}>{quotes[Math.floor(Math.random() * 59)]}</Text>
             </View>
         </View>
     );
@@ -78,5 +61,11 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
         resizeMode: 'contain',
+    },
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
+        alignItems: "center",
+        justifyContent: "center",
     },
 });
