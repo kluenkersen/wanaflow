@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 export default function App() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='End'>
+            <Stack.Navigator initialRouteName='Start'>
                 <Stack.Screen name="Start" component={StartScreen} options={{
                     title: 'Meaningfull Thought', headerShown: true, headerTitleAlign: 'center',
                 }} />
