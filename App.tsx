@@ -13,13 +13,15 @@ const Stack = createStackNavigator();
 export default function App() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='Start'>
+            <Stack.Navigator initialRouteName='End'>
                 <Stack.Screen name="Start" component={StartScreen} options={{
-                    title: 'Cleansing Thought', headerShown: true, headerTitleAlign: 'center',
+                    title: 'Meaningfull Thought', headerShown: true, headerTitleAlign: 'center',
                 }} />
-                <Stack.Screen name="End" component={EndScreen} />
+                <Stack.Screen name="End" component={EndScreen} options={{
+                    title: 'Rewarding Insights', headerShown: true, headerTitleAlign: 'center',
+                }} />
                 <Stack.Screen name="CleansingBreath" component={CleansingBreath} options={{
-                    title: 'Cleansing Breath ', headerShown: true, headerTitleAlign: 'center',
+                    title: 'Cleansing Breath', headerShown: true, headerTitleAlign: 'center',
                 }} />
                 <Stack.Screen name="BoxBreath" component={BoxBreath} options={{
                     title: 'Box Breathing', headerShown: true, headerTitleAlign: 'center',
