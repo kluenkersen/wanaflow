@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View, Text, Animated, Platform } from 'react-native';
 import { Storage } from 'expo-storage';
 
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 import { globalStyles } from '../styles/styles';
 import quotes from '../assets/steps/01-cleansing.json';
@@ -11,6 +11,14 @@ export default function CleansingBreath({ navigation, route }) {
 
     let scaleValue1 = useRef(new Animated.Value(0.3)).current;
     let scaleValue2 = useRef(new Animated.Value(0.9)).current;
+    const isFocused = useIsFocused();
+    const isFocusedRef = useRef(isFocused);
+
+    // Update the isFocusedRef whenever isFocused changes
+    useEffect(() => {
+        isFocusedRef.current = isFocused;
+    }, [isFocused]);
+
 
     const images = [
         require("../assets/breath/nose_in.jpeg"),
@@ -21,22 +29,36 @@ export default function CleansingBreath({ navigation, route }) {
     const [maxLoop, setMaxLoop] = useState(5);
 
     function goAgain() {
-        setstatusIndex(0);
-        const looped = (route.params.looped + 1)
-        scaleValue1.setValue(0.3);
-        scaleValue2.setValue(0.9);
-        navigation.navigate("CleansingBreath", { looped })
+        if (!isFocusedRef.current) {
+            return;
+        } else {
+            setstatusIndex(0);
+            const looped = (route.params.looped + 1)
+            scaleValue1.setValue(0.3);
+            scaleValue2.setValue(0.9);
+            navigation.navigate("CleansingBreath", { looped })
+        }
     }
 
     useFocusEffect(
         useCallback(() => {
-            Animated.timing(scaleValue1, {
+            if (!isFocused) {
+                route.params.looped = 1;
+                setstatusIndex(0);
+                scaleValue1.setValue(0.3);
+                scaleValue2.setValue(0.9);
+                return;
+            }
+
+            let animation1, animation2;
+
+            animation1 = Animated.timing(scaleValue1, {
                 toValue: 0.9,
                 duration: 3000,
                 useNativeDriver: true,
             }).start(() => {
                 setstatusIndex(1);
-                Animated.timing(scaleValue2, {
+                animation2 = Animated.timing(scaleValue2, {
                     toValue: 0.3,
                     duration: 3000,
                     useNativeDriver: true,
@@ -52,7 +74,11 @@ export default function CleansingBreath({ navigation, route }) {
                     }
                 });
             });
-        }, [route.params.looped])
+            return () => {
+                animation1 && animation1.stop();
+                animation2 && animation2.stop();
+            }
+        }, [route.params.looped, isFocused])
     );
 
     return (

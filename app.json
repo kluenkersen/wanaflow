@@ -22,7 +22,7 @@
       "bundleIdentifier": "com.wanaflow"
     },
     "android": {
-      "versionCode": 21,
+      "versionCode": 22,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
