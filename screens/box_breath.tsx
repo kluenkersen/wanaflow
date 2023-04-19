@@ -43,36 +43,26 @@ export default function BoxBreath({ navigation, route }) {
 
     useFocusEffect(
         useCallback(() => {
-            if (!isFocused) {
-                route.params.looped = 1;
-                setstatusIndex(0);
-                scaleValue1.setValue(0.3);
-                scaleValue2.setValue(0.9);
-                return;
-            }
-
-            let animation1, animation2, animation3, animation4;
-
-            animation1 = Animated.timing(scaleValue1, {
+            Animated.timing(scaleValue1, {
                 toValue: 0.9,
                 duration: 4000,
                 useNativeDriver: true,
             }).start(() => {
                 setstatusIndex(1);
-                animation2 = Animated.timing(scaleValueHold, {
+                Animated.timing(scaleValueHold, {
                     toValue: 0.9,
                     duration: 4000,
                     useNativeDriver: true,
                 }
                 ).start(() => {
                     setstatusIndex(2);
-                    animation3 = Animated.timing(scaleValue2, {
+                    Animated.timing(scaleValue2, {
                         toValue: 0.3,
                         duration: 4000,
                         useNativeDriver: true,
                     }).start(() => {
                         setstatusIndex(3);
-                        animation4 = Animated.timing(scaleValueHold, {
+                        Animated.timing(scaleValueHold, {
                             toValue: 0.9,
                             duration: 4000,
                             useNativeDriver: true,
@@ -90,12 +80,6 @@ export default function BoxBreath({ navigation, route }) {
                     });
                 });
             });
-            return () => {
-                animation1 && animation1.stop();
-                animation2 && animation2.stop();
-                animation3 && animation3.stop();
-                animation4 && animation4.stop();
-            };
         }, [route.params.looped, isFocused])
     );
 

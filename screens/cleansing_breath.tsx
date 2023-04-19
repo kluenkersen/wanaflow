@@ -42,23 +42,13 @@ export default function CleansingBreath({ navigation, route }) {
 
     useFocusEffect(
         useCallback(() => {
-            if (!isFocused) {
-                route.params.looped = 1;
-                setstatusIndex(0);
-                scaleValue1.setValue(0.3);
-                scaleValue2.setValue(0.9);
-                return;
-            }
-
-            let animation1, animation2;
-
-            animation1 = Animated.timing(scaleValue1, {
+            Animated.timing(scaleValue1, {
                 toValue: 0.9,
                 duration: 3000,
                 useNativeDriver: true,
             }).start(() => {
                 setstatusIndex(1);
-                animation2 = Animated.timing(scaleValue2, {
+                Animated.timing(scaleValue2, {
                     toValue: 0.3,
                     duration: 3000,
                     useNativeDriver: true,
@@ -74,10 +64,6 @@ export default function CleansingBreath({ navigation, route }) {
                     }
                 });
             });
-            return () => {
-                animation1 && animation1.stop();
-                animation2 && animation2.stop();
-            }
         }, [route.params.looped, isFocused])
     );
 
