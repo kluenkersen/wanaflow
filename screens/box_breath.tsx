@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View, Text, Animated, Platform } from 'react-native';
 import { Storage } from 'expo-storage';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { useKeepAwake } from 'expo-keep-awake';
 
 import { globalStyles } from '../styles/styles';
 import quotes from '../assets/steps/01-cleansing.json';
 
 export default function BoxBreath({ navigation, route }) {
+    useKeepAwake();
 
     const scaleValue1 = useRef(new Animated.Value(0.3)).current;
     const scaleValue2 = useRef(new Animated.Value(0.9)).current;

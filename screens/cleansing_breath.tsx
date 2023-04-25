@@ -3,11 +3,14 @@ import { Image, StyleSheet, TouchableOpacity, View, Text, Animated, Platform } f
 import { Storage } from 'expo-storage';
 
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { useKeepAwake } from 'expo-keep-awake';
 
 import { globalStyles } from '../styles/styles';
 import quotes from '../assets/steps/01-cleansing.json';
 
+
 export default function CleansingBreath({ navigation, route }) {
+    useKeepAwake();
 
     let scaleValue1 = useRef(new Animated.Value(0.3)).current;
     let scaleValue2 = useRef(new Animated.Value(0.9)).current;

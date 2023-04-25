@@ -5,7 +5,10 @@ import { Storage } from 'expo-storage';
 import { globalStyles } from '../styles/styles';
 import quotes from '../assets/steps/01-cleansing.json';
 
+import { useKeepAwake } from 'expo-keep-awake';
+
 export default function StartScreen({ navigation }) {
+    useKeepAwake();
 
     const technique = ['CleansingBreath', 'BoxBreath'];
     const [opacityStatus, setOpacityStatus] = useState(-1);
