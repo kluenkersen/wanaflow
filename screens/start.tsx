@@ -6,6 +6,7 @@ import { globalStyles } from '../styles/styles';
 import quotes from '../assets/steps/01-cleansing.json';
 
 import { useKeepAwake } from 'expo-keep-awake';
+import { cancelAllScheduledNotificationsAsync, Notification, scheduleNotificationAsync } from 'expo-notifications';
 
 export default function StartScreen({ navigation }) {
     useKeepAwake();
@@ -44,8 +45,43 @@ export default function StartScreen({ navigation }) {
         }
     }
 
+    async function setNotifcation(){
+        async function scheduleNotifications() {
+            // Cancel any previously scheduled notifications
+            await cancelAllScheduledNotificationsAsync();
+            
+      
+            // Schedule a notification to be triggered at 8:00 AM
+            const tomorrow8AM = new Date();
+            tomorrow8AM.setDate(tomorrow8AM.getDate() + 1);
+            tomorrow8AM.setHours(8);
+            tomorrow8AM.setMinutes(0);
+            await scheduleNotificationAsync({
+              content: {
+                title: 'Good morning!',
+                body: 'Time to parctice your breathing.',
+              },
+              trigger: { date: tomorrow8AM },
+            });
+      
+            // Schedule a notification to be triggered at 7:00 PM
+            const today7PM = new Date();
+            today7PM.setHours(19);
+            today7PM.setMinutes(0);
+            await scheduleNotificationAsync({
+              content: {
+                title: 'Good evening!',
+                body: 'Time to wind down and breathe.',
+              },
+              trigger: { date: today7PM },
+            });
+          }
+          scheduleNotifications();
+    }
+
     useEffect(() => {
         loadFile();
+        setNotifcation();
     }, [])
 
     return (
